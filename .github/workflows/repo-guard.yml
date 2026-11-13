@@ -1,0 +1,46 @@
+name: RepoGuard 6.0.1
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  repo-guard:
+    name: RepoGuard exact BASE/HEAD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: RepoGuard exact snapshot transition
+        uses: netkeep80/repo-guard@74db97791e6da8a75287164f0d0b41579108f114
+        with:
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+          node-version: '24'
+
+      - name: Checkout pinned compiler for failure diagnostics
+        if: failure()
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: netkeep80/repo-guard
+          ref: 74db97791e6da8a75287164f0d0b41579108f114
+          path: .tools/repo-guard
+          persist-credentials: false
+      - name: Print exact compiler diagnostics
+        if: failure()
+        env:
+          RG_BASE: ${{ github.event.pull_request.base.sha }}
+          RG_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          npm --prefix .tools/repo-guard install --omit=dev --ignore-scripts --silent
+          node .tools/repo-guard/dist/repo-guard.mjs --repo-root . check --base "$RG_BASE" --head "$RG_HEAD" --format json > "$RUNNER_TEMP/fgm-repoguard.json" || true
+          node -e 'const o=JSON.parse(require("node:fs").readFileSync(process.env.RUNNER_TEMP+"/fgm-repoguard.json","utf8")); console.log(JSON.stringify({ok:o.ok,j1:o.j1,j2:o.j2,j3:o.j3,diagnostics:o.diagnostics},null,2))'
