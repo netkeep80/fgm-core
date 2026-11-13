@@ -1,0 +1,16 @@
+format: repo-guard/requirement-v1
+id: FGMC-PRODUCT-000
+normative: "### FGMC-PRODUCT-000 — A game-independent, deterministic Fractal Generative Model language and canonical CPU evaluator. This is accepted project direction, not evidence of a working implementation."
+lifecycle:
+  accepted: true
+  current: true
+  published: false
+relations:
+  - predicates: [documents]
+    target:
+      kind: artifact
+      path: "README.md"
+  - predicates: [documents]
+    target:
+      kind: artifact
+      path: "docs/requirements-hierarchy.md"
