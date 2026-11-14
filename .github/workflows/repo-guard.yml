@@ -27,6 +27,8 @@ jobs:
         run: node --test tests/document-language.test.mjs
       - name: Verify Russian documentation at exact HEAD
         run: node scripts/check-document-language.mjs
+      - name: Проверить исполняемые примеры FGM-0
+        run: node --test tests/fgm-0.test.mjs
       - name: RepoGuard exact snapshot transition
         uses: netkeep80/repo-guard@74db97791e6da8a75287164f0d0b41579108f114
         with:
