@@ -1,0 +1,55 @@
+format: repo-guard/requirement-v1
+id: FGMC-GEOM-001
+normative: "### FGMC-GEOM-001 — Композиция FGM должна различать точные операции формы, явное сглаживание и разрешение перекрытий материалов. Сглаживание должно сохранять точную форму вне разрешённой области и в защищённой области. В активной части общего объёма материал должен выбираться по явному числовому приоритету с устойчивым разрешением равенства независимо от камеры, чанка и порядка обхода. Наложение должно сохранять вклады для повторной выборки после снятия одного из них. Замещение должно выражаться явной операцией формы. Выбор материала сам по себе должен сохранять поле формы и отдельно заданное правило коллизии. Синтетические проверки должны покрывать острый угол, сквозной вырез, разрешённое сглаживание, защищённую область, перекрытие и удаление вклада."
+lifecycle:
+  accepted: false
+  current: false
+  published: false
+relations:
+  - predicates: [derives_from]
+    target:
+      kind: requirement
+      id: "FGMC-PRODUCT-000"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-LANG-001"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-SPACE-001"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-VIS-001"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "docs/fgm-geometry.md"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-geometry-witness.mjs"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: ".github/workflows/repo-guard.yml"
+  - predicates: [verified_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-geometry.test.mjs"
+  - predicates: [documents]
+    target:
+      kind: artifact
+      path: "docs/requirements-hierarchy.md"
+constraints:
+  - id: fgm_geometry_examples_execution
+    activation: scoped_change
+    scope:
+      relations: [implemented_by, verified_by]
+    evidence:
+      class: execution
+      key: "execution:tests/fgm-geometry.test.mjs"
+      verifier:
+        kind: artifact
+        path: "tests/fgm-geometry.test.mjs"
