@@ -37,6 +37,11 @@ jobs:
         run: node --test tests/fgm-geometry.test.mjs
       - name: Проверить каноническую запись и идентичность FGM
         run: node --test tests/fgm-serialization.test.mjs
+      - name: Собрать CPU-исполнитель C++20 и проверить выборку
+        run: |
+          cmake -S . -B "$RUNNER_TEMP/fgm-cpu" -DCMAKE_BUILD_TYPE=Release
+          cmake --build "$RUNNER_TEMP/fgm-cpu" --parallel 2
+          ctest --test-dir "$RUNNER_TEMP/fgm-cpu" --output-on-failure
       - name: RepoGuard exact snapshot transition
         uses: netkeep80/repo-guard@74db97791e6da8a75287164f0d0b41579108f114
         with:

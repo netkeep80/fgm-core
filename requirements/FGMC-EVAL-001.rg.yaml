@@ -1,0 +1,45 @@
+format: repo-guard/requirement-v1
+id: FGMC-EVAL-001
+normative: "### FGMC-EVAL-001 — Эталонный CPU-исполнитель C++20 должен загружать пакет FGM, проверять версии, обязательные поля, ссылки и типы узлов и вычислять поле и семантический материал по контрактам C01–C04. Он должен предоставлять локальную и мировую выборки с однозначными числовыми и диагностическими правилами. Для одного снимка результат должен быть независим от порядка запросов и параметров камеры. Автономные тесты должны проверять примитивы, операции над формой, границы, материалы, преобразования и отказы без браузера и GPU."
+lifecycle:
+  accepted: false
+  current: false
+  published: false
+relations:
+  - predicates: [derives_from]
+    target: {kind: requirement, id: "FGMC-PRODUCT-000"}
+  - predicates: [depends_on]
+    target: {kind: requirement, id: "FGMC-LANG-001"}
+  - predicates: [depends_on]
+    target: {kind: requirement, id: "FGMC-SPACE-001"}
+  - predicates: [depends_on]
+    target: {kind: requirement, id: "FGMC-GEOM-001"}
+  - predicates: [depends_on]
+    target: {kind: requirement, id: "FGMC-SERIAL-001"}
+  - predicates: [implemented_by]
+    target: {kind: artifact, path: "CMakeLists.txt"}
+  - predicates: [implemented_by]
+    target: {kind: artifact, path: "include/fgm/evaluator.hpp"}
+  - predicates: [implemented_by]
+    target: {kind: artifact, path: "src/evaluator.cpp"}
+  - predicates: [implemented_by]
+    target: {kind: artifact, path: ".github/workflows/repo-guard.yml"}
+  - predicates: [verified_by]
+    target: {kind: artifact, path: "tests/fgm-eval.test.cpp"}
+  - predicates: [verified_by]
+    target: {kind: artifact, path: "tests/fixtures/c04-panel.fgm.json"}
+  - predicates: [documents]
+    target: {kind: artifact, path: "docs/fgm-evaluator.md"}
+  - predicates: [documents]
+    target: {kind: artifact, path: "docs/requirements-hierarchy.md"}
+  - predicates: [documents]
+    target: {kind: artifact, path: "README.md"}
+constraints:
+  - id: fgm_evaluator_execution
+    activation: scoped_change
+    scope:
+      relations: [implemented_by, verified_by]
+    evidence:
+      class: execution
+      key: "execution:tests/fgm-eval.test.cpp"
+      verifier: {kind: artifact, path: "tests/fgm-eval.test.cpp"}
