@@ -35,6 +35,8 @@ jobs:
         run: node --test tests/fgm-visual.test.mjs
       - name: Проверить композицию формы и материалов FGM
         run: node --test tests/fgm-geometry.test.mjs
+      - name: Проверить каноническую запись и идентичность FGM
+        run: node --test tests/fgm-serialization.test.mjs
       - name: RepoGuard exact snapshot transition
         uses: netkeep80/repo-guard@74db97791e6da8a75287164f0d0b41579108f114
         with:
