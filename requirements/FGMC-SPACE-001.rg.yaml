@@ -1,0 +1,47 @@
+format: repo-guard/requirement-v1
+id: FGMC-SPACE-001
+normative: "### FGMC-SPACE-001 — Спецификация координат FGM должна задавать правосторонние пространства экземпляра и мира, единицы и обратимые преобразования переноса, поворота и равномерного масштаба. Она должна определять адреса вложенных кубов и чанков, владельца точки и единый точный адрес общей двоичной точки для соседних кубов, включая разные уровни. Один экземпляр должен выбирать одно поле в общих локальных координатах. Семантическая поверхность непрерывного поля определяется границей замыкания отрицательной области. Видимая сетка и игровые коллизии вычисляются потребителями отдельно. Исполняемые синтетические проверки должны покрывать преобразования, общие точки, границы чанков и выборку одного объекта из смежных кубов."
+lifecycle:
+  accepted: false
+  current: false
+  published: false
+relations:
+  - predicates: [derives_from]
+    target:
+      kind: requirement
+      id: "FGMC-PRODUCT-000"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-LANG-001"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "docs/fgm-space.md"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-space-witness.mjs"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: ".github/workflows/repo-guard.yml"
+  - predicates: [verified_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-space.test.mjs"
+  - predicates: [documents]
+    target:
+      kind: artifact
+      path: "docs/requirements-hierarchy.md"
+constraints:
+  - id: fgm_space_examples_execution
+    activation: scoped_change
+    scope:
+      relations: [implemented_by, verified_by]
+    evidence:
+      class: execution
+      key: "execution:tests/fgm-space.test.mjs"
+      verifier:
+        kind: artifact
+        path: "tests/fgm-space.test.mjs"
