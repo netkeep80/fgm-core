@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { types } from "node:util";
 import { prepareFgm0 } from "./fgm-0-witness.mjs";
 import { prepareMatter, prepareSmoothUnion } from "./fgm-geometry-witness.mjs";
 
@@ -31,6 +32,35 @@ function catalog(value, check) {
 function checkParameter(value) {
   require(Number.isFinite(value) || (Array.isArray(value) && value.length === 3 &&
     [...value].every(Number.isFinite)));
+}
+
+// Фиксируем одни и те же данные для валидации, исполнения и записи.
+function snapshotJson(value, active = new Set()) {
+  if (value === null || typeof value === "boolean" || typeof value === "string" ||
+      Number.isFinite(value)) return value;
+  require(!types.isProxy(value) && (Array.isArray(value) || record(value)) && !active.has(value));
+  active.add(value);
+  const descriptors = Object.getOwnPropertyDescriptors(value);
+  function copyMember(key) {
+    const descriptor = descriptors[key];
+    require(Object.hasOwn(descriptors, key) && descriptor.enumerable &&
+      Object.hasOwn(descriptor, "value"));
+    return snapshotJson(descriptor.value, active);
+  }
+
+  let result;
+  if (Array.isArray(value)) {
+    require(Object.getPrototypeOf(value) === Array.prototype &&
+      Reflect.ownKeys(descriptors).length === value.length + 1);
+    result = Array.from({ length: value.length }, (_, index) => copyMember(String(index)));
+  } else {
+    result = Object.fromEntries(Reflect.ownKeys(descriptors).map(key => {
+      require(typeof key === "string");
+      return [key, copyMember(key)];
+    }));
+  }
+  active.delete(value);
+  return result;
 }
 
 function canonicalJson(value) {
@@ -117,9 +147,10 @@ function compilePackage(pkg, resolveVolume) {
 }
 
 function normalize(pkg) {
-  compilePackage(pkg, () => () => 0);
-  const contributions = [...pkg.model.contributions].sort((a, b) => a.id < b.id ? -1 : 1);
-  return { ...pkg, model: { ...pkg.model, contributions } };
+  const snapshot = snapshotJson(pkg);
+  compilePackage(snapshot, () => () => 0);
+  snapshot.model.contributions.sort((a, b) => a.id < b.id ? -1 : 1);
+  return snapshot;
 }
 
 function hash(domain, value) {
@@ -157,5 +188,6 @@ export function deriveSeed(pkg, purpose) {
 }
 
 export function preparePackage(pkg, resolveVolume) {
-  return compilePackage(pkg, resolveVolume);
+  require(resolveVolume === undefined || typeof resolveVolume === "function", "E_VOLUME");
+  return compilePackage(snapshotJson(pkg), resolveVolume);
 }

@@ -133,3 +133,27 @@ test("неоднозначный JSON и неподдерживаемые обя
     assert.throws(() => serializePackage(next), { message });
   }
 });
+
+test("запись принимает только обычные данные JSON и отклоняет неоднозначные объекты", () => {
+  const hidden = fixture();
+  Object.defineProperty(hidden.model, "seed", { enumerable: false });
+  hidden.model.extra = 0;
+  assert.throws(() => serializePackage(hidden), { message: "E_PACKAGE" });
+  assert.throws(() => identifyPackage(hidden), { message: "E_PACKAGE" });
+
+  const accessor = fixture();
+  Object.defineProperty(accessor.model.contributions[0].field.program.nodes[0], "value", {
+    get() { assert.fail("Проверка не должна вызывать геттер"); },
+  });
+  assert.throws(() => serializePackage(accessor), { message: "E_PACKAGE" });
+
+  const extraProperty = fixture();
+  extraProperty.model.contributions.extra = 0;
+  assert.throws(() => serializePackage(extraProperty), { message: "E_PACKAGE" });
+  const sparse = fixture();
+  delete sparse.model.contributions[0];
+  assert.throws(() => serializePackage(sparse), { message: "E_PACKAGE" });
+  const cyclic = fixture();
+  cyclic.model.volumes = cyclic;
+  assert.throws(() => serializePackage(cyclic), { message: "E_PACKAGE" });
+});
