@@ -18,7 +18,7 @@
 
 Модель и визуальный профиль имеют отдельные версионирование и идентичность; алгоритмы, параметры и семена синтеза должны быть воспроизводимы. Отсутствие исходных пикселей в результате **не означает автоматически**, что права на охраняемые элементы оригинальных произведений прекратились. Происхождение и разрешённость распространения данных определяются отдельно.
 
-**Разработка и проверка:** [задача #13](https://github.com/netkeep80/fgm-core/issues/13); связанные задачи [регенератора](https://github.com/netkeep80/fgm-regenerator/issues/15), [рендерера](https://github.com/netkeep80/fgm-renderer/issues/14) и [игры](https://github.com/netkeep80/ufo-fractal/issues/5). Формализация нормативных Requirements и тестов запланирована в этих задачах; README сам по себе не утверждает реализацию.
+Границы входов и исполняемый синтетический пример описаны в [контракте C09](docs/fgm-visual.md). [Задача #13](https://github.com/netkeep80/fgm-core/issues/13) · [Регенератор](https://github.com/netkeep80/fgm-regenerator/issues/15) · [Рендерер](https://github.com/netkeep80/fgm-renderer/issues/14) · [Игра](https://github.com/netkeep80/ufo-fractal/issues/5)
 
 ## Границы ответственности
 

@@ -31,6 +31,8 @@ jobs:
         run: node --test tests/fgm-0.test.mjs
       - name: Проверить координаты и адресацию FGM
         run: node --test tests/fgm-space.test.mjs
+      - name: Проверить независимость семантики FGM от визуального профиля
+        run: node --test tests/fgm-visual.test.mjs
       - name: RepoGuard exact snapshot transition
         uses: netkeep80/repo-guard@74db97791e6da8a75287164f0d0b41579108f114
         with:

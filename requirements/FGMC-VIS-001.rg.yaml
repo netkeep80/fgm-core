@@ -1,0 +1,51 @@
+format: repo-guard/requirement-v1
+id: FGMC-VIS-001
+normative: "### FGMC-VIS-001 — Семантическая модель FGM и визуальный профиль должны иметь отдельные входы и идентичность. Профиль должен задаваться версией алгоритма, параметрами и семенем при его использовании. При фиксированных семантических входах и локальной точке смена профиля, камеры, разрешения или детализации должна сохранять выборку формы и семантического материала, а также авторитетные игровые свойства. Синтетическая проверка должна сравнить два профиля одного объекта, воспроизвести профиль после повторной загрузки и показать изменение результата при изменении соответствующего семантического или визуального входа."
+lifecycle:
+  accepted: false
+  current: false
+  published: false
+relations:
+  - predicates: [derives_from]
+    target:
+      kind: requirement
+      id: "FGMC-PRODUCT-000"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-LANG-001"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-SPACE-001"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "docs/fgm-visual.md"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-visual-witness.mjs"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: ".github/workflows/repo-guard.yml"
+  - predicates: [verified_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-visual.test.mjs"
+  - predicates: [documents]
+    target:
+      kind: artifact
+      path: "docs/requirements-hierarchy.md"
+constraints:
+  - id: fgm_visual_examples_execution
+    activation: scoped_change
+    scope:
+      relations: [implemented_by, verified_by]
+    evidence:
+      class: execution
+      key: "execution:tests/fgm-visual.test.mjs"
+      verifier:
+        kind: artifact
+        path: "tests/fgm-visual.test.mjs"
