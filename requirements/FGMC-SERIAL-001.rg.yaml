@@ -1,0 +1,59 @@
+format: repo-guard/requirement-v1
+id: FGMC-SERIAL-001
+normative: "### FGMC-SERIAL-001 — Пакет FGM должен иметь явные версии формата и семантики интерпретатора и каноническую запись в UTF-8. Повторное чтение и запись должны сохранять форму, материалы, сохранённое семя и идентичность. Хеш модели должен зависеть от её семантических входов, а идентичность пакета должна дополнительно учитывать версию генератора, идентификаторы и хеши ресурсов и параметры генерации. Семя заданного назначения должно воспроизводиться по тем же явным входам. Неоднозначные записи, неподдерживаемые версии и неизвестные обязательные узлы должны отклоняться. Исполняемые проверки должны сравнивать канонические байты и хеши с синтетическим эталоном и подтверждать семантическую выборку после повторной записи."
+lifecycle:
+  accepted: false
+  current: false
+  published: false
+relations:
+  - predicates: [derives_from]
+    target:
+      kind: requirement
+      id: "FGMC-PRODUCT-000"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-GEOM-001"
+  - predicates: [depends_on]
+    target:
+      kind: requirement
+      id: "FGMC-VIS-001"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "docs/fgm-package.md"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-serialization-witness.mjs"
+  - predicates: [implemented_by]
+    target:
+      kind: artifact
+      path: ".github/workflows/repo-guard.yml"
+  - predicates: [verified_by]
+    target:
+      kind: artifact
+      path: "tests/fgm-serialization.test.mjs"
+  - predicates: [verified_by]
+    target:
+      kind: artifact
+      path: "tests/fixtures/c04-panel.fgm.json"
+  - predicates: [verified_by]
+    target:
+      kind: artifact
+      path: "tests/fixtures/c04-panel-expected.json"
+  - predicates: [documents]
+    target:
+      kind: artifact
+      path: "docs/requirements-hierarchy.md"
+constraints:
+  - id: fgm_serialization_examples_execution
+    activation: scoped_change
+    scope:
+      relations: [implemented_by, verified_by]
+    evidence:
+      class: execution
+      key: "execution:tests/fgm-serialization.test.mjs"
+      verifier:
+        kind: artifact
+        path: "tests/fgm-serialization.test.mjs"
