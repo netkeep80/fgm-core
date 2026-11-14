@@ -181,6 +181,27 @@ test("дерево на 16 клетках имеет общую древесин
   assert.deepEqual(sample(placement.toObject([2, -5, 5.25])), sample(trunk));
 });
 
+test("соседние участки и уровни выбирают содержимое одного снимка", () => {
+  const program = {
+    version: "fgm-0",
+    nodes: [
+      { id: "radius", op: "parameter", type: "length" },
+      { id: "body", op: "sphere", radius: "radius" },
+    ],
+    root: "body",
+  };
+  const expanded = prepareFgm0(program, { parameters: { radius: 1.25 } });
+  const contracted = prepareFgm0(program, { parameters: { radius: 0.75 } });
+  const left = pointIn(cell(0, 0, 0, 0), 0, 1, 0, 0);
+  const right = pointIn(cell(1, 2, 0, 0), 0, 0, 0, 0);
+
+  assert.deepEqual(left, right);
+  assert.deepEqual(expanded(pointToObject(left, 1)), { value: -0.25 });
+  assert.deepEqual(contracted(pointToObject(left, 1)), { value: 0.25 });
+  assert.deepEqual(contracted(pointToObject(right, 1)), { value: 0.25 });
+  assert.deepEqual(expanded(pointToObject(right, 1)), { value: -0.25 });
+});
+
 test("нулевая грань внутри древесины отличается от внешней границы", () => {
   const sample = prepareFgm0({
     version: "fgm-0",
