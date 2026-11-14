@@ -107,6 +107,7 @@ test("проверяются идентификаторы, приоритет, �
   assert.throws(() => prepareMatter([{ ...rock, priority: Infinity }]), { message: "E_CONTRIBUTION" });
   assert.throws(() => prepareMatter([{ ...rock, sample: () => NaN }])(center), { message: "E_GEOM_VALUE" });
   const smooth = { left: rock.sample, right: beam.sample, width: 0, allowed: rock.sample };
+  assert.throws(() => prepareSmoothUnion(null), { message: "E_SMOOTH" });
   assert.throws(() => prepareSmoothUnion(smooth), { message: "E_SMOOTH" });
   assert.throws(() => prepareSmoothUnion({ ...smooth, width: 1, allowed: () => Infinity })(center),
     { message: "E_GEOM_VALUE" });

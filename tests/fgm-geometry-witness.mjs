@@ -43,7 +43,8 @@ export function prepareMatter(contributions) {
   };
 }
 
-export function prepareSmoothUnion({ left, right, width, allowed, protectedRegion } = {}) {
+export function prepareSmoothUnion(options) {
+  const { left, right, width, allowed, protectedRegion } = options ?? {};
   if (![left, right, allowed].every(sample => typeof sample === "function") ||
       !Number.isFinite(width) || width <= 0 ||
       (protectedRegion !== undefined && typeof protectedRegion !== "function")) {
